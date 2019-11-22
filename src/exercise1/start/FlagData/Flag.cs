@@ -1,12 +1,33 @@
 using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace FlagData
 {
     /// <summary>
     /// This model object represents a single flag
     /// </summary>
-    public class Flag
+    public class Flag : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private readonly DateTime _DateAdopted;
+        public DateTime DateAdopted
+        {
+            get { return DateAdopted; }
+            set
+            {
+                if (_DateAdopted != value)
+                {
+                    DateAdopted = value;
+                    // Can pass the property name as a string,
+                    // -or- let the compiler do it because of the
+                    // CallerMemberNameAttribute on the RaisePropertyChanged method.
+                    RaisePropertyChanged();
+                }
+
+            }
+        }
         /// <summary>
         /// Name of the country that this flag belongs to
         /// </summary>
@@ -18,7 +39,7 @@ namespace FlagData
         /// <summary>
         /// The date this flag was adopted
         /// </summary>
-        public DateTime DateAdopted { get; set; }
+        /// 
         /// <summary>
         /// Whether the flag includes an image/shield as part of the design
         /// </summary>
@@ -31,5 +52,14 @@ namespace FlagData
         /// A URL for more information
         /// </summary>
         public Uri MoreInformationUrl { get; set; }
+
+        private void RaisePropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public double BillAmount { get; set; }
+
     }
+
 }
